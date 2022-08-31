@@ -1,13 +1,33 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+body{
+    background: rgb(24, 22, 22);
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+@layer base{
+    .quiz-list > div > div {
+        @apply p-4 my-2 border-b mb-2 rounded-lg 
+    }
+    .choices > span{
+        @apply 
+        mr-3 mb-2 rounded-xl text-gray-700 
+        border border-gray-700 px-4 py-1 text-sm cursor-pointer 
+        inline-block transition hover:bg-indigo-400 hover:text-white hover:border-indigo-400
+    }
+    .choices > span.active{
+        @apply text-white bg-cyan-600 border-cyan-700
+    }
+
+    .error {
+        @apply border-red-900 border bg-red-100 
+    }
+
+    .button{
+        @apply
+        bg-rose-600 text-white py-3 w-40 mx-auto rounded-xl
+        hover:bg-rose-700 transition-all font-bold tracking-wide
+    }
 }
