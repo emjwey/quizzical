@@ -2,74 +2,87 @@ import React from "react"
 
 export default function Quiz(props){
     
+    // ready for checking and will show the button
     const checking = props.checking.checking 
-    const validate = props.getQuiz.every(q => q.answered)
-    console.log(`validate: ${validate}`)
-    console.log(`checking: ${checking}`) 
 
+    //check if all question is answered
+    const validate = props.getQuiz.every(q => q.answered)
+ 
+    //count the correct answer
+    const correctAnswer = props.getQuiz.filter(q => { 
+        let count = 0
+        q.choices.filter( c => {
+            if(c.selected && c.choice === q.correct_answer) count = count + 1
+        })
+        return count
+    }).length
+ 
     const quiz = props.getQuiz.map( (q,index) => {
-         
         return (
             <div 
                 className={ checking && !q.answered ? 'error': ''} 
                 key={index}>
                 <h3 className="relative">
-                    <strong>{q.question}</strong> <small>{q.correct_answer}</small>
-                    <span className="font-mono absolute right-0 top-0 ">x</span>
+                    <strong>{q.question}</strong>
                 </h3>
-                <div className='mt-4 choices'>
+                <div className='mt-4 choices'>  
                     {   
                         q.choices.map((c,index) => {
-                            let choiceClass
-                           
-                            choiceClass = 
-                                !checking
-                                    ? c.selected 
-                                        ? "selected" 
-                                        :"not-selected" 
-                                    : validate 
-                                        ?  c.selected && c.choice === q.correct_answer
-                                            ? "correct"
-                                            : c.choice === q.correct_answer 
-                                                ? "correct"
-                                                : c.selected
-                                                    ? "incorrect"
+                            let choiceClass = !checking
+                                            ? c.selected 
+                                                ? "selected" 
+                                                :"not-selected" 
+                                            : validate 
+                                                ?  c.selected && c.choice === q.correct_answer
+                                                    ? "correct"
+                                                    : c.choice === q.correct_answer 
+                                                        ? "correct"
+                                                        : c.selected
+                                                            ? "incorrect"
+                                                            : ""
+                                                : c.selected 
+                                                    ? "selected"
                                                     : ""
-                                        : c.selected 
-                                            ? "selected"
-                                            : ""
                             
-                            
-
-                            //choiceClass = (c.selected) ? "selected" : ""
-                            //choiceClass = (props.checking && !validate) ? c.choice === q.correct_answer ? "correct" : c.selected ? "selected incorrect" : "" : c.selected ? "selected" : ""
-
-
-                            //${!validate && props.checking && c.choice === q.correct_answer? 'correct':'incorrect' }`
                             return (
                                 <span 
-                                className=  {choiceClass} 
-                                key= {`x-${index}`}
-                                onClick = {() => props.selectChoice(c.choice,q.id)}
-                            >{c.choice}</span>
+                                    className=  {choiceClass} 
+                                    key= {`x-${index}`}
+                                    onClick = {() => props.selectChoice(c.choice,q.id)}
+                                >{c.choice}</span>
                             )
                         })
                     }
                 </div>
-
             </div>
         )
     })
 
     return (
         <div className="quiz-list ">
-            <div className="p-2">
+            <h1 className="text-5xl px-4 pt-5 ">Questions</h1>
+            <div className="p-2 list">
                 {quiz}
             </div>
-            <button 
-                className='button mx-auto mt-3  block'
-                onClick={props.checkAnswer}
-                >Check Answer</button>
+            {validate && 
+                <div className="flex content-center items-center p-2 ">
+                    {
+                        checking && 
+                        <div className="w-1/2">
+                            <p>
+                                {`You scored ${correctAnswer}/${props.getQuiz.length} correct answers`}
+                            </p>
+                        </div>
+                    }
+                        <div className="absolute right-[40px] bottom-4 " >
+                            <button 
+                                className='button  '
+                                onClick={props.checkAnswer}
+                                >{checking ? "Play Again" : "Check Answer"} 
+                            </button>
+                        </div>
+                </div>
+            }
         </div>
     )
 }

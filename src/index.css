@@ -11,8 +11,11 @@ body{
     .quiz-list {
         @apply mt-[150px] px-4 pb-3 bg-white w-[600px] mx-auto block box-border relative 
     }
-    .quiz-list > div > div {
-        @apply p-4 my-2 border-b mb-2 rounded-lg 
+    .quiz-list > .list > div {
+        @apply p-4 my-2 border-b mb-2 
+    }
+    .quiz-list > .list > div:last-child{
+        @apply border-b-0
     }
     .choices > span{
         @apply 
@@ -31,15 +34,18 @@ body{
     .choices > span.incorrect{
         @apply bg-red-400 border-red-700 text-white
     }
-    
-
     .error {
         @apply border-red-900 border bg-red-100 
     }
-
     .button{
         @apply
         bg-rose-600 text-white py-3 w-40 mx-auto rounded-xl
         hover:bg-rose-700 transition-all font-bold tracking-wide
+    }
+    .welcome{
+        @apply
+        absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 mx-auto w-96
+        bg-orange-100 flex flex-col flex-wrap content-center 
+        justify-center text-center min-h-[400px]
     }
 }

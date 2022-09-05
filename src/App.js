@@ -11,12 +11,18 @@ function App() {
 
 	const [quizStart, setQuizStart] = useState(false)
 	const [randomQuestion, setRandomQuestion] = useState(() => JSON.parse(localStorage.getItem("randomQuestions")) || [])
-	const [checking, setChecking] = useState({ready:false, valid:false, checking:false})
+	const [checking, setChecking] = useState({complete:false, checking:false})
 
 	useEffect( ()=> {
 
 		if(randomQuestion.length === 0) { 
-			fetch("https://opentdb.com/api.php?amount=5&category=27&difficulty=easy&type=multiple")
+			getNewQuestions();
+		} 
+
+	},[quizStart])
+
+	function getNewQuestions(){
+		fetch("https://opentdb.com/api.php?amount=5&category=27&difficulty=easy&type=multiple")
 			.then(res => res.json())
 			.then(data =>  {
 				setRandomQuestion(data.results.map( q => {
@@ -31,13 +37,10 @@ function App() {
 						}
 					}
 				))
-				localStorage.setItem("randomQuestions",JSON.stringify(randomQuestion))
+				//localStorage.setItem("randomQuestions",JSON.stringify(randomQuestion))
 			})
-			
-		} 
-
-	},[quizStart])
-
+			setChecking(c => ({...c,complete:false, checking:false}))
+	}
  
 	const startQuizBtn = () =>{
 		setQuizStart(true)
@@ -56,28 +59,21 @@ function App() {
 			: {...rq}
 		})
 		setRandomQuestion(questions)
-		console.log(randomQuestion)
-		let check = randomQuestion.every(rq => rq.answered)
-		setChecking(c => ({...c,ready: check?true:false}))
-
+		 
 	}
  
 	const checkAnswer = () =>{
 		
-		let selectedAnswer = randomQuestion.map( rq => {
-			let selected = rq.choices.filter(c => c.selected )
-			return {answer: rq.correct_answer, selected}
-		})
-		setChecking(c => ({...c, checking:true}))
-		console.log(checking)
-		console.log(randomQuestion)
+		checking.complete 
+			? getNewQuestions()
+			: setChecking(c => ({...c,complete:true, checking:true}))
+
+		console.log(checking.complete)
+		 
  
  
 	}
-
-	const setEveryChecking = () =>{
-
-	}
+ 
 
   return (
     <> 
